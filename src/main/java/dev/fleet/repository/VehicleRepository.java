@@ -3,5 +3,5 @@ package dev.fleet.repository;
 import dev.fleet.entity.Vehicle;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface VehicleRepository extends JpaRepository<Vehicle, PK> {
+public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
 }
