@@ -98,7 +98,6 @@ CREATE TABLE trips
     request_id bigint not null unique,
     driver_id bigint not null,
     vehicle_id bigint not null,
-    status varchar(30) not null,
     started_at timestamptz,
     completed_at timestamptz,
     completion_comment text,
