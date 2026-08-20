@@ -1,4 +1,9 @@
 package dev.fleet.dto.request;
 
-public record CompleteTripRequest() {
+import dev.fleet.entity.enums.VehicleCondition;
+
+public record CompleteTripRequest(
+    String completionComment,
+    VehicleCondition vehicleConditionAfter
+) {
 }

@@ -1,4 +1,13 @@
 package dev.fleet.dto.request;
 
-public record CreateTransportRequest() {
+import dev.fleet.entity.enums.VehicleType;
+
+public record CreateTransportRequest(
+    String departureAddress,
+    String destinationAddress,
+    VehicleType requiredVehicleType,
+    Integer cargoWeightKg,
+    Integer passengerCount,
+    String requestDescription
+) {
 }

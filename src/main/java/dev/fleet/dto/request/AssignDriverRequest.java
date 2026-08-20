@@ -1,4 +1,6 @@
 package dev.fleet.dto.request;
 
-public record AssignDriverRequest() {
+public record AssignDriverRequest(
+    Long driverId
+) {
 }

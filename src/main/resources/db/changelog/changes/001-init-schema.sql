@@ -40,14 +40,14 @@ CREATE TABLE vehicles
     vehicle_type varchar(30) not null,
     load_capacity_kg integer not null default 0 check (load_capacity_kg >= 0),
     passenger_capacity integer not null default 0 check (passenger_capacity >= 0),
-    condition varchar(30) not null,
+    vehicle_condition varchar(30) not null,
 
     constraint fk_vehicles_vehicle_type
         foreign key (vehicle_type)
             references vehicle_types(code),
 
-    constraint fk_vehicles_condition
-        foreign key (condition)
+    constraint fk_vehicles_vehicle_condition
+        foreign key (vehicle_condition)
             references vehicle_conditions(code)
 );
 
@@ -59,7 +59,7 @@ CREATE TABLE drivers
     last_name varchar(50) not null check (trim(last_name) <> ''),
     license_number varchar(30) not null unique check (trim(license_number) <> ''),
     vehicle_id bigint unique,
-    active boolean not null default true,
+    is_active boolean not null default true,
 
     constraint fk_drivers_vehicle
         foreign key (vehicle_id)
@@ -78,7 +78,7 @@ CREATE TABLE transport_requests
     required_vehicle_type varchar(30) not null,
     cargo_weight_kg integer not null default 0 check (cargo_weight_kg >= 0),
     passenger_count integer not null default 0 check (passenger_count >= 0),
-    description text,
+    request_description text,
     request_status varchar(30) not null,
     created_at timestamptz not null default current_timestamp,
 
@@ -98,7 +98,6 @@ CREATE TABLE trips
     request_id bigint not null unique,
     driver_id bigint not null,
     vehicle_id bigint not null,
-    status varchar(30) not null,
     started_at timestamptz,
     completed_at timestamptz,
     completion_comment text,
