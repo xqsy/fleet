@@ -9,6 +9,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -37,4 +38,29 @@ public class Driver {
 
     @Column(name = "is_active", nullable = false)
     private boolean isActive;
+
+
+    @Builder
+    public Driver(
+            String firstName,
+            String lastName,
+            String licenseNumber
+    ) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.licenseNumber = licenseNumber;
+        this.isActive = true;
+    }
+
+    public void update(
+            String firstName,
+            String lastName,
+            String licenseNumber,
+            boolean isActive
+    ) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.licenseNumber = licenseNumber;
+        this.isActive = isActive;
+    }
 }

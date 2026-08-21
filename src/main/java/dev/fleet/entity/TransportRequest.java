@@ -13,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -51,4 +52,44 @@ public class TransportRequest {
 
     @Column(name = "created_at", nullable = false)
     private OffsetDateTime createdAt;
+
+    @Builder
+    public TransportRequest(
+            String departureAddress,
+            String destinationAddress,
+            VehicleType requiredVehicleType,
+            Integer cargoWeightKg,
+            Integer passengerCount,
+            String requestDescription
+    ) {
+        this.departureAddress = departureAddress;
+        this.destinationAddress = destinationAddress;
+        this.requiredVehicleType = requiredVehicleType;
+        this.cargoWeightKg = cargoWeightKg;
+        this.passengerCount = passengerCount;
+        this.requestDescription = requestDescription;
+
+        this.requestStatus = TransportRequestStatus.NEW;
+        this.createdAt = OffsetDateTime.now();
+    }
+
+    public void update(
+            String departureAddress,
+            String destinationAddress,
+            VehicleType requiredVehicleType,
+            Integer cargoWeightKg,
+            Integer passengerCount,
+            String requestDescription
+    ) {
+        this.departureAddress = departureAddress;
+        this.destinationAddress = destinationAddress;
+        this.requiredVehicleType = requiredVehicleType;
+        this.cargoWeightKg = cargoWeightKg;
+        this.passengerCount = passengerCount;
+        this.requestDescription = requestDescription;
+    }
+
+    public void changeStatus(TransportRequestStatus requestStatus) {
+        this.requestStatus = requestStatus;
+    }
 }
