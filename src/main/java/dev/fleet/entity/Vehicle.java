@@ -10,6 +10,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.AccessLevel;
@@ -22,7 +23,7 @@ public class Vehicle {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Column(name = "registration_number", nullable = false, unique = true)
     private String registrationNumber;
@@ -40,4 +41,33 @@ public class Vehicle {
     @Enumerated(EnumType.STRING)
     @Column(name = "vehicle_condition", nullable = false)
     private VehicleCondition vehicleCondition;
+
+    @Builder
+    public Vehicle(
+            String registrationNumber,
+            VehicleType vehicleType,
+            Integer loadCapacityKg,
+            Integer passengerCapacity,
+            VehicleCondition vehicleCondition
+    ) {
+        this.registrationNumber = registrationNumber;
+        this.vehicleType = vehicleType;
+        this.loadCapacityKg = loadCapacityKg;
+        this.passengerCapacity = passengerCapacity;
+        this.vehicleCondition = vehicleCondition;
+    }
+
+    public void update(
+            String registrationNumber,
+            VehicleType vehicleType,
+            Integer loadCapacityKg,
+            Integer passengerCapacity,
+            VehicleCondition vehicleCondition
+    ) {
+        this.registrationNumber = registrationNumber;
+        this.vehicleType = vehicleType;
+        this.loadCapacityKg = loadCapacityKg;
+        this.passengerCapacity = passengerCapacity;
+        this.vehicleCondition = vehicleCondition;
+    }
 }
