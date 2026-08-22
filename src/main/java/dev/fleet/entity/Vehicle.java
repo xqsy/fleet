@@ -70,4 +70,8 @@ public class Vehicle {
         this.passengerCapacity = passengerCapacity;
         this.vehicleCondition = vehicleCondition;
     }
+
+    public void changeCondition(VehicleCondition vehicleCondition) {
+        this.vehicleCondition = vehicleCondition;
+    }
 }

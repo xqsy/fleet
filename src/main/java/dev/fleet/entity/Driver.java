@@ -63,4 +63,8 @@ public class Driver {
         this.licenseNumber = licenseNumber;
         this.isActive = isActive;
     }
+
+    public void assignVehicle(Vehicle vehicle) {
+        this.vehicle = vehicle;
+    }
 }

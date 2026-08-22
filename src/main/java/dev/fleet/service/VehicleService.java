@@ -4,7 +4,7 @@ import dev.fleet.dto.request.CreateVehicleRequest;
 import dev.fleet.dto.request.UpdateVehicleRequest;
 import dev.fleet.dto.response.VehicleResponse;
 import dev.fleet.entity.Vehicle;
-import dev.fleet.exception.VehiceNotFoundException;
+import dev.fleet.exception.VehicleNotFoundException;
 import dev.fleet.mapper.VehicleMapper;
 import dev.fleet.repository.VehicleRepository;
 import lombok.RequiredArgsConstructor;
@@ -49,6 +49,6 @@ public class VehicleService {
     }
 
     private Vehicle getVehicle(Long id) {
-        return vehicleRepository.findById(id).orElseThrow(() -> new VehiceNotFoundException(id));
+        return vehicleRepository.findById(id).orElseThrow(() -> new VehicleNotFoundException(id));
     }
 }

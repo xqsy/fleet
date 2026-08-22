@@ -61,6 +61,8 @@ public class TripService {
 
         trip.complete(completeTripRequest.completionComment(), completeTripRequest.vehicleConditionAfter());
 
+        trip.getVehicle().changeCondition(completeTripRequest.vehicleConditionAfter());
+
         trip.getTransportRequest().changeStatus(TransportRequestStatus.COMPLETED);
 
         return tripMapper.toResponse(trip);
