@@ -5,6 +5,8 @@ import dev.fleet.entity.Trip;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface TripMapper {
 
@@ -12,4 +14,6 @@ public interface TripMapper {
     @Mapping(target = "driverId", source = "driver.id")
     @Mapping(target = "vehicleId", source = "vehicle.id")
     TripResponse toResponse(Trip trip);
+
+    List<TripResponse> toResponseList(List<Trip> trips);
 }

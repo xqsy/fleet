@@ -19,6 +19,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class TripService {
@@ -66,6 +68,16 @@ public class TripService {
         trip.getTransportRequest().changeStatus(TransportRequestStatus.COMPLETED);
 
         return tripMapper.toResponse(trip);
+    }
+
+    @Transactional(readOnly = true)
+    public TripResponse getTripById(Long id) {
+        return tripMapper.toResponse(getTrip(id));
+    }
+
+    @Transactional(readOnly = true)
+    public List<TripResponse> getAllTrips() {
+        return tripMapper.toResponseList(tripRepository.findAll());
     }
 
     private Trip getTrip(Long id) {

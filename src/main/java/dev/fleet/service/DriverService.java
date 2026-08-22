@@ -15,6 +15,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class DriverService {
@@ -62,6 +64,16 @@ public class DriverService {
         driver.assignVehicle(vehicle);
 
         return driverMapper.toResponse(driver);
+    }
+
+    @Transactional(readOnly = true)
+    public DriverResponse getDriverById(Long id) {
+        return driverMapper.toResponse(getDriver(id));
+    }
+
+    @Transactional(readOnly = true)
+    public List<DriverResponse> getAllDrivers() {
+        return driverMapper.toResponseList(driverRepository.findAll());
     }
 
     private Driver getDriver(Long id) {

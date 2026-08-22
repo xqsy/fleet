@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class VehicleService {
@@ -46,6 +48,16 @@ public class VehicleService {
         Vehicle vehicle = getVehicle(id);
 
         vehicleRepository.delete(vehicle);
+    }
+
+    @Transactional(readOnly = true)
+    public VehicleResponse getVehicleById(Long id) {
+        return vehicleMapper.toResponse(getVehicle(id));
+    }
+
+    @Transactional(readOnly = true)
+    public List<VehicleResponse> getAllVehicles() {
+        return vehicleMapper.toResponseList(vehicleRepository.findAll());
     }
 
     private Vehicle getVehicle(Long id) {

@@ -6,6 +6,8 @@ import dev.fleet.entity.Driver;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
+import java.util.List;
+
 @Mapper(componentModel = "spring")
 public interface DriverMapper {
 
@@ -13,4 +15,6 @@ public interface DriverMapper {
 
     @Mapping(target = "vehicleId", source = "vehicle.id")
     DriverResponse toResponse(Driver driver);
+
+    List<DriverResponse> toResponseList(List<Driver> drivers);
 }

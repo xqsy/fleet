@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class TransportRequestService {
@@ -57,6 +59,16 @@ public class TransportRequestService {
         transportRequest.changeStatus(status);
 
         return transportRequestMapper.toResponse(transportRequest);
+    }
+
+    @Transactional(readOnly = true)
+    public TransportRequestResponse getTransportRequestById(Long id) {
+        return transportRequestMapper.toResponse(getTransportRequest(id));
+    }
+
+    @Transactional(readOnly = true)
+    public List<TransportRequestResponse> getAllTransportRequests() {
+        return transportRequestMapper.toResponseList(transportRequestRepository.findAll());
     }
 
     private TransportRequest getTransportRequest(Long id) {
