@@ -6,7 +6,6 @@ import dev.fleet.dto.response.TripResponse;
 import dev.fleet.entity.Driver;
 import dev.fleet.entity.TransportRequest;
 import dev.fleet.entity.Trip;
-import dev.fleet.entity.Vehicle;
 import dev.fleet.entity.enums.TransportRequestStatus;
 import dev.fleet.exception.DriverNotFoundException;
 import dev.fleet.exception.TransportRequestNotFoundException;
@@ -37,6 +36,12 @@ public class TripService {
 
         Driver driver = driverRepository.findById(assignDriverRequest.driverId())
                 .orElseThrow(() -> new DriverNotFoundException(assignDriverRequest.driverId()));
+
+        if (driver.getVehicle() == null) {
+            throw new IllegalStateException(
+                    "Driver with id " + driver.getId() + " has no assigned vehicle"
+            );
+        }
 
         Trip trip = Trip.create(transportRequest, driver);
         Trip savedTrip = tripRepository.save(trip);
