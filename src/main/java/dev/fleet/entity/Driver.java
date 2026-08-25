@@ -37,7 +37,7 @@ public class Driver {
     private Vehicle vehicle;
 
     @Column(name = "is_active", nullable = false)
-    private boolean isActive;
+    private Boolean isActive;
 
 
     @Builder
@@ -56,7 +56,7 @@ public class Driver {
             String firstName,
             String lastName,
             String licenseNumber,
-            boolean isActive
+            Boolean isActive
     ) {
         this.firstName = firstName;
         this.lastName = lastName;

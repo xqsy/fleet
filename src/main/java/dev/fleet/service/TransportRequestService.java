@@ -53,12 +53,12 @@ public class TransportRequestService {
     }
 
     @Transactional
-    public TransportRequestResponse changeStatus(Long id, TransportRequestStatus status) {
-        TransportRequest transportRequest = getTransportRequest(id);
+    public TransportRequestResponse cancelTransportRequest(Long id) {
+        TransportRequest request = getTransportRequest(id);
 
-        transportRequest.changeStatus(status);
+        request.changeStatus(TransportRequestStatus.CANCELLED);
 
-        return transportRequestMapper.toResponse(transportRequest);
+        return transportRequestMapper.toResponse(request);
     }
 
     @Transactional(readOnly = true)
