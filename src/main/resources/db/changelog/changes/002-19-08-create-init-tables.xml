@@ -21,8 +21,7 @@
             <column name="registration_number" type="varchar(30)">
                 <constraints
                         nullable="false"
-                        unique="true"
-                        checkConstraint="trim(registration_number) &lt;> ''"/>
+                        unique="true"/>
             </column>
 
             <column name="vehicle_type" type="varchar(30)">
@@ -86,21 +85,18 @@
 
             <column name="first_name" type="varchar(50)">
                 <constraints
-                        nullable="false"
-                        checkConstraint="trim(first_name) &lt;> ''"/>
+                        nullable="false"/>
             </column>
 
             <column name="last_name" type="varchar(50)">
                 <constraints
-                        nullable="false"
-                        checkConstraint="trim(last_name) &lt;> ''"/>
+                        nullable="false"/>
             </column>
 
             <column name="license_number" type="varchar(30)">
                 <constraints
                         nullable="false"
-                        unique="true"
-                        checkConstraint="trim(license_number) &lt;> ''"/>
+                        unique="true"/>
             </column>
 
             <column name="vehicle_id" type="BIGINT">
@@ -148,14 +144,12 @@
 
             <column name="departure_address" type="varchar(250)">
                 <constraints
-                        nullable="false"
-                        checkConstraint="trim(departure_address) &lt;> ''"/>
+                        nullable="false"/>
             </column>
 
             <column name="destination_address" type="varchar(250)">
                 <constraints
-                        nullable="false"
-                        checkConstraint="trim(destination_address) &lt;> ''"/>
+                        nullable="false"/>
             </column>
 
             <column name="required_vehicle_type" type="varchar(30)">
@@ -246,7 +240,7 @@
 
             <column name="completion_comment" type="text"/>
 
-            <column name="vehicle_condition_after" type="varchar(20)"/>
+            <column name="vehicle_condition_after" type="varchar(30)"/>
 
         </createTable>
 
