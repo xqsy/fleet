@@ -1,4 +1,12 @@
 package dev.fleet.dto.request;
 
-public record AssignDriverRequest() {
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+
+public record AssignDriverRequest(
+
+    @NotNull
+    @Positive
+    Long driverId
+) {
 }
