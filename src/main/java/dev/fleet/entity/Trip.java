@@ -2,7 +2,10 @@ package dev.fleet.entity;
 
 import java.time.OffsetDateTime;
 
+import dev.fleet.entity.enums.TransportRequestStatus;
 import dev.fleet.entity.enums.VehicleCondition;
+import dev.fleet.exception.InvalidOperationException;
+import dev.fleet.exception.VehicleNotSuitableException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -66,23 +69,63 @@ public class Trip {
     }
 
     public static Trip create(TransportRequest transportRequest, Driver driver) {
-        return Trip.builder()
+
+        Vehicle vehicle = driver.getVehicle();
+
+        if (transportRequest.getRequestStatus() != TransportRequestStatus.NEW) {
+            throw new InvalidOperationException("Trip can only be created for a new request");
+        }
+
+        if (!driver.getIsActive()) {
+            throw new InvalidOperationException("Inactive driver can't be assigned to trip");
+        }
+
+        if (driver.getVehicle() == null) {
+            throw new InvalidOperationException("Driver has no assigned vehicle");
+        }
+
+        if (vehicle.getVehicleType() != transportRequest.getRequiredVehicleType()) {
+            throw new VehicleNotSuitableException("Vehicle type does not match transport request");
+        }
+
+        if (vehicle.getLoadCapacityKg() < transportRequest.getCargoWeightKg()) {
+            throw new VehicleNotSuitableException("Vehicle load capacity doesn't match the request");
+        }
+
+        if (vehicle.getPassengerCapacity() < transportRequest.getPassengerCount()) {
+            throw new VehicleNotSuitableException("Vehicle passenger capacity doesn't match the request");
+        }
+
+        Trip trip = Trip.builder()
                 .transportRequest(transportRequest)
                 .driver(driver)
                 .vehicle(driver.getVehicle())
                 .build();
+
+        transportRequest.changeStatus(TransportRequestStatus.ASSIGNED);
+
+        return trip;
     }
 
     public void start() {
+        if (transportRequest.getRequestStatus() != TransportRequestStatus.ASSIGNED) {
+            throw new InvalidOperationException("Only trip with assigned driver can be started");
+        }
+
         this.startedAt = OffsetDateTime.now();
+
+        transportRequest.changeStatus(TransportRequestStatus.IN_PROGRESS);
     }
 
-    public void complete(
-            String completionComment,
-            VehicleCondition vehicleConditionAfter
-    ) {
+    public void complete(String completionComment, VehicleCondition vehicleConditionAfter) {
+        if (transportRequest.getRequestStatus() != TransportRequestStatus.IN_PROGRESS) {
+            throw new InvalidOperationException("Only trip in progress can be completed");
+        }
+
         this.completedAt = OffsetDateTime.now();
         this.completionComment = completionComment;
         this.vehicleConditionAfter = vehicleConditionAfter;
+
+        transportRequest.changeStatus(TransportRequestStatus.COMPLETED);
     }
 }

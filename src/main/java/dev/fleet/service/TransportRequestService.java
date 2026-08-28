@@ -4,7 +4,6 @@ import dev.fleet.dto.request.CreateTransportRequest;
 import dev.fleet.dto.request.UpdateTransportRequest;
 import dev.fleet.dto.response.TransportRequestResponse;
 import dev.fleet.entity.TransportRequest;
-import dev.fleet.entity.enums.TransportRequestStatus;
 import dev.fleet.exception.TransportRequestNotFoundException;
 import dev.fleet.mapper.TransportRequestMapper;
 import dev.fleet.repository.TransportRequestRepository;
@@ -33,14 +32,7 @@ public class TransportRequestService {
     public TransportRequestResponse updateTransportRequest(Long id, UpdateTransportRequest request) {
         TransportRequest transportRequest = getTransportRequest(id);
 
-        transportRequest.update(
-                request.departureAddress(),
-                request.destinationAddress(),
-                request.requiredVehicleType(),
-                request.cargoWeightKg(),
-                request.passengerCount(),
-                request.requestDescription()
-        );
+        transportRequestMapper.update(request, transportRequest);
 
         return transportRequestMapper.toResponse(transportRequest);
     }
@@ -56,7 +48,7 @@ public class TransportRequestService {
     public TransportRequestResponse cancelTransportRequest(Long id) {
         TransportRequest request = getTransportRequest(id);
 
-        request.changeStatus(TransportRequestStatus.CANCELLED);
+        request.cancel();
 
         return transportRequestMapper.toResponse(request);
     }

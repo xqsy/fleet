@@ -32,13 +32,7 @@ public class VehicleService {
     public VehicleResponse updateVehicle(Long id, UpdateVehicleRequest request) {
         Vehicle vehicle = getVehicle(id);
 
-        vehicle.update(
-                request.registrationNumber(),
-                request.vehicleType(),
-                request.loadCapacityKg(),
-                request.passengerCapacity(),
-                request.vehicleCondition()
-        );
+        vehicleMapper.update(request, vehicle);
 
         return vehicleMapper.toResponse(vehicle);
     }

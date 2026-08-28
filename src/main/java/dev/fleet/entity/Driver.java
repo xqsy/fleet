@@ -52,18 +52,6 @@ public class Driver {
         this.isActive = true;
     }
 
-    public void update(
-            String firstName,
-            String lastName,
-            String licenseNumber,
-            Boolean isActive
-    ) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.licenseNumber = licenseNumber;
-        this.isActive = isActive;
-    }
-
     public void assignVehicle(Vehicle vehicle) {
         this.vehicle = vehicle;
     }

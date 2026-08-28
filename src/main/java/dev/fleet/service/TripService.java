@@ -37,16 +37,8 @@ public class TripService {
         Driver driver = driverRepository.findById(assignDriverRequest.driverId())
                 .orElseThrow(() -> new DriverNotFoundException(assignDriverRequest.driverId()));
 
-        if (driver.getVehicle() == null) {
-            throw new IllegalStateException(
-                    "Driver with id " + driver.getId() + " has no assigned vehicle"
-            );
-        }
-
         Trip trip = Trip.create(transportRequest, driver);
         Trip savedTrip = tripRepository.save(trip);
-
-        transportRequest.changeStatus(TransportRequestStatus.ASSIGNED);
 
         return tripMapper.toResponse(savedTrip);
     }
@@ -56,8 +48,6 @@ public class TripService {
         Trip trip = getTrip(id);
 
         trip.start();
-
-        trip.getTransportRequest().changeStatus(TransportRequestStatus.IN_PROGRESS);
 
         return tripMapper.toResponse(trip);
     }
@@ -69,8 +59,6 @@ public class TripService {
         trip.complete(completeTripRequest.completionComment(), completeTripRequest.vehicleConditionAfter());
 
         trip.getVehicle().changeCondition(completeTripRequest.vehicleConditionAfter());
-
-        trip.getTransportRequest().changeStatus(TransportRequestStatus.COMPLETED);
 
         return tripMapper.toResponse(trip);
     }

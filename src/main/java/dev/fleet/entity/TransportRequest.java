@@ -4,6 +4,7 @@ import java.time.OffsetDateTime;
 
 import dev.fleet.entity.enums.TransportRequestStatus;
 import dev.fleet.entity.enums.VehicleType;
+import dev.fleet.exception.InvalidOperationException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -73,23 +74,15 @@ public class TransportRequest {
         this.createdAt = OffsetDateTime.now();
     }
 
-    public void update(
-            String departureAddress,
-            String destinationAddress,
-            VehicleType requiredVehicleType,
-            Integer cargoWeightKg,
-            Integer passengerCount,
-            String requestDescription
-    ) {
-        this.departureAddress = departureAddress;
-        this.destinationAddress = destinationAddress;
-        this.requiredVehicleType = requiredVehicleType;
-        this.cargoWeightKg = cargoWeightKg;
-        this.passengerCount = passengerCount;
-        this.requestDescription = requestDescription;
+    public void cancel() {
+        if (this.requestStatus == TransportRequestStatus.COMPLETED) {
+            throw new InvalidOperationException("Completed transport request can't be cancelled");
+        }
+
+        this.requestStatus = TransportRequestStatus.CANCELLED;
     }
 
-    public void changeStatus(TransportRequestStatus requestStatus) {
+    void changeStatus(TransportRequestStatus requestStatus) {
         this.requestStatus = requestStatus;
     }
 }

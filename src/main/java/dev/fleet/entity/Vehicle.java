@@ -57,20 +57,6 @@ public class Vehicle {
         this.vehicleCondition = vehicleCondition;
     }
 
-    public void update(
-            String registrationNumber,
-            VehicleType vehicleType,
-            Integer loadCapacityKg,
-            Integer passengerCapacity,
-            VehicleCondition vehicleCondition
-    ) {
-        this.registrationNumber = registrationNumber;
-        this.vehicleType = vehicleType;
-        this.loadCapacityKg = loadCapacityKg;
-        this.passengerCapacity = passengerCapacity;
-        this.vehicleCondition = vehicleCondition;
-    }
-
     public void changeCondition(VehicleCondition vehicleCondition) {
         this.vehicleCondition = vehicleCondition;
     }

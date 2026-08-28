@@ -37,12 +37,7 @@ public class DriverService {
     public DriverResponse updateDriver(Long id, UpdateDriverRequest request) {
         Driver driver = getDriver(id);
 
-        driver.update(
-                request.firstName(),
-                request.lastName(),
-                request.licenseNumber(),
-                request.isActive()
-        );
+        driverMapper.update(request, driver);
 
         return driverMapper.toResponse(driver);
     }
