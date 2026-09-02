@@ -14,21 +14,17 @@ public class DriverSpecification {
                 criteriaBuilder.isTrue(root.get("isActive"));
     }
 
-    public static Specification<Driver> isActiveOnBus() {
+    public static Specification<Driver> hasVehicleType(VehicleType type) {
         return (root, query, criteriaBuilder) -> {
-                Join<Driver, Vehicle> vehicle = root.join("vehicle");
+            Join<Driver, Vehicle> vehicle = root.join("vehicle");
+            return criteriaBuilder.equal(vehicle.get("vehicleType"), type);
+        };
+    }
 
-                return criteriaBuilder.and(
-                        criteriaBuilder.isTrue(root.get("isActive")),
-                        criteriaBuilder.equal(
-                                vehicle.get("vehicleType"),
-                                VehicleType.BUS
-                        ),
-                        criteriaBuilder.equal(
-                                vehicle.get("vehicleCondition"),
-                                VehicleCondition.GOOD
-                        )
-                );
+    public static Specification<Driver> hasVehicleCondition(VehicleCondition condition) {
+        return (root, query, criteriaBuilder) -> {
+            Join<Driver, Vehicle> vehicle = root.join("vehicle");
+            return criteriaBuilder.equal(vehicle.get("vehicleCondition"), condition);
         };
     }
 }

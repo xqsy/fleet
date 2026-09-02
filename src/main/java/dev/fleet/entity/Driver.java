@@ -32,7 +32,7 @@ public class Driver {
     private Vehicle vehicle;
 
     @Column(name = "is_active", nullable = false)
-    private Boolean isActive;
+    private boolean isActive;
 
     @OneToMany(mappedBy = "driver")
     private List<Trip> trips;

@@ -1,17 +1,21 @@
 package dev.fleet.service;
 
+import dev.fleet.dao.specification.DriverSpecification;
 import dev.fleet.dto.request.AssignVehicleRequest;
 import dev.fleet.dto.request.CreateDriverRequest;
 import dev.fleet.dto.request.UpdateDriverRequest;
 import dev.fleet.dto.response.DriverResponse;
 import dev.fleet.entity.Driver;
 import dev.fleet.entity.Vehicle;
+import dev.fleet.entity.enums.VehicleCondition;
+import dev.fleet.entity.enums.VehicleType;
 import dev.fleet.exception.DriverNotFoundException;
 import dev.fleet.exception.VehicleNotFoundException;
 import dev.fleet.mapper.DriverMapper;
 import dev.fleet.repository.DriverRepository;
 import dev.fleet.repository.VehicleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,6 +73,21 @@ public class DriverService {
     @Transactional(readOnly = true)
     public List<DriverResponse> getAllDrivers() {
         return driverMapper.toResponseList(driverRepository.findAll());
+    }
+
+    @Transactional(readOnly = true)
+    public List<Driver> getActiveDrivers() {
+        return driverRepository.findAll(DriverSpecification.isActive());
+    }
+
+    @Transactional(readOnly = true)
+    public List<Driver> getActiveDriversOnBus() {
+        Specification<Driver> specification = Specification
+                .where(DriverSpecification.isActive())
+                .and(DriverSpecification.hasVehicleType(VehicleType.BUS))
+                .and(DriverSpecification.hasVehicleCondition(VehicleCondition.GOOD));
+
+        return driverRepository.findAll(specification);
     }
 
     private Driver getDriver(Long id) {

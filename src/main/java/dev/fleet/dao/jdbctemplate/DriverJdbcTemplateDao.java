@@ -17,15 +17,36 @@ public class DriverJdbcTemplateDao {
     private final JdbcTemplate jdbcTemplate;
 
     public List<DriverJdbcRecord> getActiveDrivers() {
-        String sql = "SELECT * FROM drivers WHERE is_active = true";
+        String sql = """
+                SELECT
+                    id,
+                    first_name,
+                    last_name,
+                    license_number,
+                    vehicle_id,
+                    is_active
+                FROM drivers
+                WHERE is_active = true
+                """;
 
         return jdbcTemplate.query(sql, this::mapDriver);
     }
 
     public List<DriverJdbcRecord> getActiveDriversOnBus() {
         String sql = """
-                SELECT d.* FROM drivers d JOIN vehicles v ON v.id = d.vehicle_id
-                WHERE d.is_active = true AND v.vehicle_type = 'BUS' AND v.vehicle_condition = 'GOOD'
+                SELECT
+                    d.id,
+                    d.first_name,
+                    d.last_name,
+                    d.license_number,
+                    d.vehicle_id,
+                    d.is_active
+                FROM drivers d
+                JOIN vehicles v
+                    ON v.id = d.vehicle_id
+                WHERE d.is_active = true
+                  AND v.vehicle_type = 'BUS'
+                  AND v.vehicle_condition = 'GOOD'
                 """;
 
         return jdbcTemplate.query(sql, this::mapDriver);
