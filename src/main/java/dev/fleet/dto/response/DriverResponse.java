@@ -6,6 +6,6 @@ public record DriverResponse(
     String lastName,
     String licenseNumber,
     Long vehicleId,
-    Boolean isActive
+    boolean isActive
 ) {
 }
