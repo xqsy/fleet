@@ -1,25 +1,24 @@
 package dev.fleet.service;
 
 import dev.fleet.dao.specification.DriverSpecification;
+import dev.fleet.dto.filter.DriverFilter;
 import dev.fleet.dto.request.AssignVehicleRequest;
 import dev.fleet.dto.request.CreateDriverRequest;
 import dev.fleet.dto.request.UpdateDriverRequest;
 import dev.fleet.dto.response.DriverResponse;
 import dev.fleet.entity.Driver;
 import dev.fleet.entity.Vehicle;
-import dev.fleet.entity.enums.VehicleCondition;
-import dev.fleet.entity.enums.VehicleType;
 import dev.fleet.exception.DriverNotFoundException;
 import dev.fleet.exception.VehicleNotFoundException;
 import dev.fleet.mapper.DriverMapper;
 import dev.fleet.repository.DriverRepository;
 import dev.fleet.repository.VehicleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -71,23 +70,32 @@ public class DriverService {
     }
 
     @Transactional(readOnly = true)
-    public List<DriverResponse> getAllDrivers() {
-        return driverMapper.toResponseList(driverRepository.findAll());
-    }
+    public Page<DriverResponse> getAllDrivers(DriverFilter filter, Pageable pageable) {
+        Specification<Driver> specification =
+                (root, query, criteriaBuilder) ->
+                        criteriaBuilder.conjunction();
 
-    @Transactional(readOnly = true)
-    public List<Driver> getActiveDrivers() {
-        return driverRepository.findAll(DriverSpecification.isActive());
-    }
+        if (filter.isActive() != null) {
+            specification = specification.and(DriverSpecification.hasActiveStatus(filter.isActive()));
+        }
 
-    @Transactional(readOnly = true)
-    public List<Driver> getActiveDriversOnBus() {
-        Specification<Driver> specification = Specification
-                .where(DriverSpecification.isActive())
-                .and(DriverSpecification.hasVehicleType(VehicleType.BUS))
-                .and(DriverSpecification.hasVehicleCondition(VehicleCondition.GOOD));
+        if (filter.vehicleType() != null) {
+            specification = specification.and(DriverSpecification.hasVehicleType(filter.vehicleType()));
+        }
 
-        return driverRepository.findAll(specification);
+        if (filter.vehicleCondition() != null) {
+            specification = specification.and(DriverSpecification.hasVehicleCondition(filter.vehicleCondition()));
+        }
+
+        if (filter.minLoadCapacityKg() != null) {
+            specification = specification.and(DriverSpecification.hasMinLoadCapacityKg(filter.minLoadCapacityKg()));
+        }
+
+        if (filter.minPassengerCount() != null) {
+            specification = specification.and(DriverSpecification.hasMinPassengerCapacity(filter.minPassengerCount()));
+        }
+
+        return driverRepository.findAll(specification, pageable).map(driverMapper::toResponse);
     }
 
     private Driver getDriver(Long id) {
