@@ -15,7 +15,7 @@ import java.lang.annotation.Target;
         ElementType.PARAMETER
 })
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = ValidLicenseNumberValidator.class)
+@Constraint(validatedBy = LicenseNumberValidator.class)
 public @interface ValidLicenseNumber {
     String message() default "invalid license number format";
 

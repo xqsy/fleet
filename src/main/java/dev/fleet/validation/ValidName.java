@@ -15,7 +15,7 @@ import java.lang.annotation.Target;
         ElementType.PARAMETER
 })
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = ValidNameValidator.class)
+@Constraint(validatedBy = NameValidator.class)
 public @interface ValidName {
     String message() default  "Invalid name format";
 

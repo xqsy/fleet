@@ -29,12 +29,9 @@ public class DriverController {
     }
 
     @GetMapping
-    public Page<DriverResponse> getAllDrivers(@Valid DriverFilter driverFilter,
-            @PageableDefault(
-                sort = "lastName",
-                direction = Sort.Direction.ASC
-            )
-            Pageable pageable
+    public Page<DriverResponse> getAllDrivers(
+            @Valid DriverFilter driverFilter,
+            @PageableDefault(page = 0, size = 15, sort = "lastName", direction = Sort.Direction.ASC) Pageable pageable
     ) {
         return driverService.getAllDrivers(driverFilter, pageable);
     }

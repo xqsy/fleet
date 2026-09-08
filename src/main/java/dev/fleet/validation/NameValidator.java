@@ -5,9 +5,9 @@ import jakarta.validation.ConstraintValidatorContext;
 
 import java.util.regex.Pattern;
 
-public class ValidLicenseNumberValidator implements ConstraintValidator<ValidLicenseNumber, String> {
+public class NameValidator implements ConstraintValidator<ValidName, String> {
 
-    private static final Pattern LICENSE_NUMBER_PATTERN = Pattern.compile("[A-Z0-9]{6,15}");
+    private static final Pattern NAME_PATTERN = Pattern.compile("[A-Za-z]+(-[A-Za-z]+)*");
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
@@ -15,6 +15,6 @@ public class ValidLicenseNumberValidator implements ConstraintValidator<ValidLic
             return false;
         }
 
-        return LICENSE_NUMBER_PATTERN.matcher(value).matches();
+        return NAME_PATTERN.matcher(value).matches();
     }
 }
