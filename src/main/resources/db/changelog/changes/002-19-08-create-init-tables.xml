@@ -1,0 +1,277 @@
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+            http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-5.0.xsd">
+
+    <changeSet id="2026-08-13-create-vehicles" author="xqsy">
+
+        <createTable tableName="vehicles">
+
+            <column
+                    name="id"
+                    type="BIGINT"
+                    autoIncrement="true"
+                    generationType="BY DEFAULT">
+                <constraints
+                        primaryKey="true"
+                        nullable="false"/>
+            </column>
+
+            <column name="registration_number" type="varchar(30)">
+                <constraints
+                        nullable="false"
+                        unique="true"/>
+            </column>
+
+            <column name="vehicle_type" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column
+                    name="load_capacity_kg"
+                    type="integer"
+                    defaultValueNumeric="0">
+                <constraints
+                        nullable="false"
+                        checkConstraint="load_capacity_kg &gt;= 0"/>
+            </column>
+
+            <column
+                    name="passenger_capacity"
+                    type="integer"
+                    defaultValueNumeric="0">
+                <constraints
+                        nullable="false"
+                        checkConstraint="passenger_capacity &gt;= 0"/>
+            </column>
+
+            <column name="condition" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+
+        <addForeignKeyConstraint
+                constraintName="fk_vehicles_vehicle_type"
+                baseTableName="vehicles"
+                baseColumnNames="vehicle_type"
+                referencedTableName="vehicle_types"
+                referencedColumnNames="code"/>
+
+        <addForeignKeyConstraint
+                constraintName="fk_vehicles_condition"
+                baseTableName="vehicles"
+                baseColumnNames="condition"
+                referencedTableName="vehicle_conditions"
+                referencedColumnNames="code"/>
+
+    </changeSet>
+
+
+    <changeSet id="2026-08-13-create-drivers" author="xqsy">
+
+        <createTable tableName="drivers">
+
+            <column
+                    name="id"
+                    type="BIGINT"
+                    autoIncrement="true"
+                    generationType="BY DEFAULT">
+                <constraints
+                        primaryKey="true"
+                        nullable="false"/>
+            </column>
+
+            <column name="first_name" type="varchar(50)">
+                <constraints
+                        nullable="false"/>
+            </column>
+
+            <column name="last_name" type="varchar(50)">
+                <constraints
+                        nullable="false"/>
+            </column>
+
+            <column name="license_number" type="varchar(30)">
+                <constraints
+                        nullable="false"
+                        unique="true"/>
+            </column>
+
+            <column name="vehicle_id" type="BIGINT">
+                <constraints unique="true"/>
+            </column>
+
+            <column
+                    name="active"
+                    type="boolean"
+                    defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+
+        <addForeignKeyConstraint
+                constraintName="fk_drivers_vehicle"
+                baseTableName="drivers"
+                baseColumnNames="vehicle_id"
+                referencedTableName="vehicles"
+                referencedColumnNames="id"
+                onDelete="SET NULL"/>
+
+        <addUniqueConstraint
+                constraintName="uq_drivers_id_vehicle"
+                tableName="drivers"
+                columnNames="id, vehicle_id"/>
+
+    </changeSet>
+
+
+    <changeSet id="2026-08-13-create-transport-requests" author="xqsy">
+
+        <createTable tableName="transport_requests">
+
+            <column
+                    name="id"
+                    type="BIGINT"
+                    autoIncrement="true"
+                    generationType="BY DEFAULT">
+                <constraints
+                        primaryKey="true"
+                        nullable="false"/>
+            </column>
+
+            <column name="departure_address" type="varchar(250)">
+                <constraints
+                        nullable="false"/>
+            </column>
+
+            <column name="destination_address" type="varchar(250)">
+                <constraints
+                        nullable="false"/>
+            </column>
+
+            <column name="required_vehicle_type" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column
+                    name="cargo_weight_kg"
+                    type="integer"
+                    defaultValueNumeric="0">
+                <constraints
+                        nullable="false"
+                        checkConstraint="cargo_weight_kg &gt;= 0"/>
+            </column>
+
+            <column
+                    name="passenger_count"
+                    type="integer"
+                    defaultValueNumeric="0">
+                <constraints
+                        nullable="false"
+                        checkConstraint="passenger_count &gt;= 0"/>
+            </column>
+
+            <column name="description" type="text"/>
+
+            <column name="request_status" type="varchar(30)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column
+                    name="created_at"
+                    type="timestamptz"
+                    defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+
+        </createTable>
+
+        <addForeignKeyConstraint
+                constraintName="fk_transport_requests_vehicle_type"
+                baseTableName="transport_requests"
+                baseColumnNames="required_vehicle_type"
+                referencedTableName="vehicle_types"
+                referencedColumnNames="code"/>
+
+        <addForeignKeyConstraint
+                constraintName="fk_transport_requests_status"
+                baseTableName="transport_requests"
+                baseColumnNames="request_status"
+                referencedTableName="transport_request_statuses"
+                referencedColumnNames="code"/>
+
+    </changeSet>
+
+
+    <changeSet id="2026-08-13-create-trips" author="xqsy">
+
+        <createTable tableName="trips">
+
+            <column
+                    name="id"
+                    type="BIGINT"
+                    autoIncrement="true"
+                    generationType="BY DEFAULT">
+                <constraints
+                        primaryKey="true"
+                        nullable="false"/>
+            </column>
+
+            <column name="request_id" type="BIGINT">
+                <constraints
+                        nullable="false"
+                        unique="true"/>
+            </column>
+
+            <column name="driver_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="vehicle_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="started_at" type="timestamptz"/>
+
+            <column name="completed_at" type="timestamptz"/>
+
+            <column name="completion_comment" type="text"/>
+
+            <column name="vehicle_condition_after" type="varchar(30)"/>
+
+        </createTable>
+
+        <addForeignKeyConstraint
+                constraintName="fk_trips_request"
+                baseTableName="trips"
+                baseColumnNames="request_id"
+                referencedTableName="transport_requests"
+                referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint
+                constraintName="fk_trips_vehicle"
+                baseTableName="trips"
+                baseColumnNames="vehicle_id"
+                referencedTableName="vehicles"
+                referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint
+                constraintName="fk_trips_driver_vehicle"
+                baseTableName="trips"
+                baseColumnNames="driver_id, vehicle_id"
+                referencedTableName="drivers"
+                referencedColumnNames="id, vehicle_id"/>
+
+        <addForeignKeyConstraint
+                constraintName="fk_trips_vehicle_condition"
+                baseTableName="trips"
+                baseColumnNames="vehicle_condition_after"
+                referencedTableName="vehicle_conditions"
+                referencedColumnNames="code"/>
+
+    </changeSet>
+    
+</databaseChangeLog>    
