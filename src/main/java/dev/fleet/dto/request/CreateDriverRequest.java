@@ -1,20 +1,21 @@
 package dev.fleet.dto.request;
 
+import dev.fleet.validation.ValidLicenseNumber;
+import dev.fleet.validation.ValidName;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
 public record CreateDriverRequest(
 
-    @NotBlank
+    @ValidName
     @Size(max = 50)
     String firstName,
 
-    @NotBlank
+    @ValidName
     @Size(max = 50)
     String lastName,
 
-    @NotBlank
-    @Size(max = 30)
+    @ValidLicenseNumber
     String licenseNumber
 ) {
 }

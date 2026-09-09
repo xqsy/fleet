@@ -1,5 +1,6 @@
 package dev.fleet.controller;
 
+import dev.fleet.dto.filter.DriverFilter;
 import dev.fleet.dto.request.AssignVehicleRequest;
 import dev.fleet.dto.request.CreateDriverRequest;
 import dev.fleet.dto.request.UpdateDriverRequest;
@@ -7,10 +8,12 @@ import dev.fleet.dto.response.DriverResponse;
 import dev.fleet.service.DriverService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/drivers")
@@ -26,8 +29,11 @@ public class DriverController {
     }
 
     @GetMapping
-    public List<DriverResponse> getAllDrivers() {
-        return driverService.getAllDrivers();
+    public Page<DriverResponse> getAllDrivers(
+            @Valid DriverFilter driverFilter,
+            @PageableDefault(page = 0, size = 15, sort = "lastName", direction = Sort.Direction.ASC) Pageable pageable
+    ) {
+        return driverService.getAllDrivers(driverFilter, pageable);
     }
 
     @GetMapping("/{id}")
