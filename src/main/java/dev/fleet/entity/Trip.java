@@ -76,7 +76,7 @@ public class Trip {
             throw new InvalidOperationException("Trip can only be created for a new request");
         }
 
-        if (!driver.getIsActive()) {
+        if (!driver.isActive()) {
             throw new InvalidOperationException("Inactive driver can't be assigned to trip");
         }
 
