@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import dev.fleet.workload.DriverWorkloadLimitException;
+
 import java.time.Instant;
 import java.util.stream.Collectors;
 
@@ -30,7 +32,11 @@ public class GlobalExceptionHandler {
         );
     }
 
-    @ExceptionHandler({InvalidOperationException.class, VehicleNotSuitableException.class})
+    @ExceptionHandler({
+            InvalidOperationException.class,
+            VehicleNotSuitableException.class,
+            DriverWorkloadLimitException.class
+    })
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleInvalidOperation(RuntimeException exception, HttpServletRequest request) {
         return new ErrorResponse(

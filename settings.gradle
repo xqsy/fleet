@@ -1,1 +1,3 @@
 rootProject.name = 'fleet'
+
+include 'driver-workload-spring-boot-starter'
