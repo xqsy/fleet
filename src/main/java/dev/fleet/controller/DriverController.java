@@ -6,6 +6,7 @@ import dev.fleet.dto.request.CreateDriverRequest;
 import dev.fleet.dto.request.UpdateDriverRequest;
 import dev.fleet.dto.response.DriverResponse;
 import dev.fleet.service.DriverService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -15,6 +16,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "Drivers", description = "Driver management")
 @RestController
 @RequestMapping("/drivers")
 @RequiredArgsConstructor
