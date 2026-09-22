@@ -4,6 +4,7 @@ import dev.fleet.dto.request.CreateTransportRequest;
 import dev.fleet.dto.request.UpdateTransportRequest;
 import dev.fleet.dto.response.TransportRequestResponse;
 import dev.fleet.service.TransportRequestService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Transport Requests", description = "Requests management")
 @RestController
 @RequestMapping("/transport-requests")
 @RequiredArgsConstructor

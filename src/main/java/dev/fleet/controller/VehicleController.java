@@ -4,6 +4,7 @@ import dev.fleet.dto.request.CreateVehicleRequest;
 import dev.fleet.dto.request.UpdateVehicleRequest;
 import dev.fleet.dto.response.VehicleResponse;
 import dev.fleet.service.VehicleService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Vehicles", description = "Vehicle management")
 @RestController
 @RequestMapping("/vehicles")
 @RequiredArgsConstructor

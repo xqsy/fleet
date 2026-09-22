@@ -4,6 +4,7 @@ import dev.fleet.dto.request.AssignDriverRequest;
 import dev.fleet.dto.request.CompleteTripRequest;
 import dev.fleet.dto.response.TripResponse;
 import dev.fleet.service.TripService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Tag(name = "Trips", description = "Trip management")
 @RestController
 @RequiredArgsConstructor
 public class TripController {
