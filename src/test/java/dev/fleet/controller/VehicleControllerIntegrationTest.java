@@ -82,7 +82,7 @@ public class VehicleControllerIntegrationTest {
     void getNonExistingVehicleReturnsNotFound() throws Exception {
         mockMvc.perform(get("/vehicles/{id}", 12345L))
                 .andExpect(status().isNotFound())
-                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.statusCode").value(404))
                 .andExpect(jsonPath("$.path").value("/vehicles/12345"));
     }
 

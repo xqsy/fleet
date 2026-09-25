@@ -71,7 +71,7 @@ public class VehicleAssignmentTest {
                 .andExpect(status().isCreated())
                 .andReturn().getResponse().getContentAsString();
 
-        Long driverId = JsonPath.read(driverResponse, "$.id");
+        Long driverId = JsonPath.parse(driverResponse).read("$.id", Long.class);
 
         String vehicleJson = objectMapper.writeValueAsString(
                 new CreateVehicleRequest("AB1234", VehicleType.BUS, 20, 35, VehicleCondition.GOOD));
@@ -84,7 +84,7 @@ public class VehicleAssignmentTest {
                 .andExpect(status().isCreated())
                 .andReturn().getResponse().getContentAsString();
 
-        Long vehicleId = JsonPath.read(vehicleResponse, "$.id");
+        Long vehicleId = JsonPath.parse(vehicleResponse).read("$.id", Long.class);
 
         String assignVehicleJson = objectMapper.writeValueAsString(new AssignVehicleRequest(vehicleId));
 
