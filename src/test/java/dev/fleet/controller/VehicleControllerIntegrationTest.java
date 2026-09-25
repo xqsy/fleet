@@ -1,10 +1,12 @@
 package dev.fleet.controller;
 
 
+import dev.fleet.dto.request.CreateVehicleRequest;
 import dev.fleet.entity.Vehicle;
 import dev.fleet.entity.enums.VehicleCondition;
 import dev.fleet.entity.enums.VehicleType;
 import dev.fleet.repository.VehicleRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,12 +14,13 @@ import org.springframework.boot.testcontainers.service.connection.ServiceConnect
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.postgresql.PostgreSQLContainer;
+import tools.jackson.databind.ObjectMapper;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -25,9 +28,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @Testcontainers
-@Transactional
 @AutoConfigureMockMvc
-public class VehicleControllerE2ETest {
+public class VehicleControllerIntegrationTest {
 
     @Container
     @ServiceConnection
@@ -43,17 +45,19 @@ public class VehicleControllerE2ETest {
     @Autowired
     private VehicleRepository vehicleRepository;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    @BeforeEach
+    void cleanUp() {
+        vehicleRepository.deleteAllInBatch();
+    }
+
     @Test
     void createVehicleThroughControllerAndSaveInDatabase() throws Exception {
-        String json = """
-                {
-                    "registrationNumber": "AB1234",
-                    "vehicleType": "BUS",
-                    "loadCapacityKg": 20,
-                    "passengerCapacity": 35,
-                    "vehicleCondition": "GOOD"
-                }
-                """;
+        String json = objectMapper.writeValueAsString(
+                new CreateVehicleRequest("AB1234", VehicleType.BUS, 20, 35, VehicleCondition.GOOD)
+        );
 
         mockMvc.perform(post("/vehicles").contentType(MediaType.APPLICATION_JSON).content(json))
                 .andExpect(status().isCreated())
@@ -72,5 +76,23 @@ public class VehicleControllerE2ETest {
         assertThat(savedVehicle.getLoadCapacityKg()).isEqualTo(20);
         assertThat(savedVehicle.getPassengerCapacity()).isEqualTo(35);
         assertThat(savedVehicle.getVehicleCondition()).isEqualTo(VehicleCondition.GOOD);
+    }
+
+    @Test
+    void getNonExistingVehicleReturnsNotFound() throws Exception {
+        mockMvc.perform(get("/vehicles/{id}", 12345L))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.status").value(404))
+                .andExpect(jsonPath("$.path").value("/vehicles/12345"));
+    }
+
+    @Test
+
+    void createVehicleWithInvalidValuesReturnsBadRequest() throws Exception {
+        String json = objectMapper.writeValueAsString(
+                new CreateVehicleRequest("AA1111", VehicleType.BUS, -1, -1, VehicleCondition.GOOD));
+
+        mockMvc.perform(post("/vehicles").contentType(MediaType.APPLICATION_JSON).content(json))
+                .andExpect(status().isBadRequest());
     }
 }

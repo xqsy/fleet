@@ -8,6 +8,7 @@ import dev.fleet.entity.enums.VehicleType;
 import dev.fleet.exception.VehicleNotFoundException;
 import dev.fleet.mapper.VehicleMapper;
 import dev.fleet.repository.VehicleRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -33,15 +34,15 @@ public class VehicleServiceTest {
     @InjectMocks
     private VehicleService vehicleService;
 
+    @BeforeEach
+    void cleanUp() {
+        vehicleRepository.deleteAllInBatch();
+    }
+
     @Test
     void createAndSaveVehicle () {
-        CreateVehicleRequest request = new CreateVehicleRequest(
-                "AB1234",
-                VehicleType.BUS,
-                20,
-                35,
-                VehicleCondition.GOOD
-        );
+        CreateVehicleRequest request =
+                new CreateVehicleRequest("AB1234", VehicleType.BUS, 20, 35, VehicleCondition.GOOD);
 
         Vehicle vehicle = Vehicle.builder()
                 .registrationNumber("AB1234")
@@ -51,14 +52,8 @@ public class VehicleServiceTest {
                 .vehicleCondition(VehicleCondition.GOOD)
                 .build();
 
-        VehicleResponse mockedResponse = new VehicleResponse(
-            1L,
-            "AB1234",
-            VehicleType.BUS,
-            20,
-            35,
-            VehicleCondition.GOOD
-        );
+        VehicleResponse mockedResponse =
+                new VehicleResponse(1L, "AB1234", VehicleType.BUS, 20, 35, VehicleCondition.GOOD);
 
         when(vehicleMapper.toEntity(request)).thenReturn(vehicle);
         when(vehicleRepository.save(vehicle)).thenReturn(vehicle);

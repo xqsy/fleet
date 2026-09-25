@@ -22,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 @Testcontainers
-@Transactional
 public class VehicleServiceIntegrationTest {
 
     @Container
@@ -41,13 +40,8 @@ public class VehicleServiceIntegrationTest {
 
     @Test
     void createVehicleAndSaveInDatabase() {
-        CreateVehicleRequest request = new CreateVehicleRequest(
-                "AB1234",
-                VehicleType.BUS,
-                20,
-                35,
-                VehicleCondition.GOOD
-        );
+        CreateVehicleRequest request =
+                new CreateVehicleRequest("AB1234", VehicleType.BUS, 20, 35, VehicleCondition.GOOD);
 
         VehicleResponse response = vehicleService.createVehicle(request);
 
@@ -64,13 +58,8 @@ public class VehicleServiceIntegrationTest {
 
     @Test
     void updateVehicleAndSaveInDatabase() {
-        UpdateVehicleRequest request = new UpdateVehicleRequest(
-                "CD5678",
-                VehicleType.TRUCK,
-                5000,
-                2,
-                VehicleCondition.NEEDS_REPAIR
-        );
+        UpdateVehicleRequest request =
+                new UpdateVehicleRequest("CD5678", VehicleType.TRUCK, 5000, 2, VehicleCondition.NEEDS_REPAIR);
 
         Vehicle vehicle = vehicleRepository.save(
                 Vehicle.builder()
