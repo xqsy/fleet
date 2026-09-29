@@ -1,3 +1,4 @@
 rootProject.name = 'fleet'
 
 include 'driver-workload-spring-boot-starter'
+include 'trip-cost-service'

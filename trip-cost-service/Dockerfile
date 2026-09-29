@@ -6,12 +6,13 @@ COPY gradle ./gradle
 COPY driver-workload-spring-boot-starter ./driver-workload-spring-boot-starter
 COPY trip-cost-service ./trip-cost-service
 RUN chmod +x gradlew
-RUN ./gradlew dependencies --no-daemon
-COPY src ./src
-RUN ./gradlew bootJar --no-daemon
+RUN ./gradlew :trip-cost-service:dependencies --no-daemon
+COPY trip-cost-service/src ./trip-cost-service/src
+RUN ./gradlew :trip-cost-service:bootJar --no-daemon
+
 
 FROM eclipse-temurin:21-jre-alpine-3.22
 WORKDIR /app
-COPY --from=build /workspace/build/libs/*.jar app.jar
-EXPOSE 8080
+COPY --from=build /workspace/trip-cost-service/build/libs/*.jar app.jar
+EXPOSE 8081
 ENTRYPOINT ["java", "-jar", "app.jar"]

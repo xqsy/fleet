@@ -1,8 +1,11 @@
 package dev.fleet.service;
 
+import dev.fleet.client.TripCostClient;
 import dev.fleet.dto.request.CreateTransportRequest;
+import dev.fleet.dto.request.CreateTripCostRequest;
 import dev.fleet.dto.request.UpdateTransportRequest;
 import dev.fleet.dto.response.TransportRequestResponse;
+import dev.fleet.dto.response.TripCostResponse;
 import dev.fleet.entity.TransportRequest;
 import dev.fleet.exception.TransportRequestNotFoundException;
 import dev.fleet.mapper.TransportRequestMapper;
@@ -19,6 +22,7 @@ public class TransportRequestService {
 
     private final TransportRequestRepository transportRequestRepository;
     private final TransportRequestMapper transportRequestMapper;
+    private final TripCostClient tripCostClient;
 
     @Transactional
     public TransportRequestResponse createTransportRequest(CreateTransportRequest request) {
@@ -61,6 +65,20 @@ public class TransportRequestService {
     @Transactional(readOnly = true)
     public List<TransportRequestResponse> getAllTransportRequests() {
         return transportRequestMapper.toResponseList(transportRequestRepository.findAll());
+    }
+
+    @Transactional(readOnly = true)
+    public TripCostResponse calculateTripCost(Long transportRequestId) {
+        TransportRequest request = getTransportRequest(transportRequestId);
+
+        CreateTripCostRequest tripCostRequest = new CreateTripCostRequest(request.getId(), request.getDistanceKm());
+
+        return tripCostClient.calculate(tripCostRequest);
+    }
+
+    @Transactional(readOnly = true)
+    public TripCostResponse getTripCost(Long transportRequestId) {
+        return tripCostClient.getByTransportRequestId(transportRequestId);
     }
 
     private TransportRequest getTransportRequest(Long id) {
