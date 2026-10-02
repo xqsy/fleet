@@ -3,6 +3,7 @@ package dev.fleet.controller;
 import dev.fleet.dto.request.CreateTransportRequest;
 import dev.fleet.dto.request.UpdateTransportRequest;
 import dev.fleet.dto.response.TransportRequestResponse;
+import dev.fleet.dto.response.TripCostResponse;
 import dev.fleet.service.TransportRequestService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -28,6 +29,11 @@ public class TransportRequestController {
         return transportRequestService.createTransportRequest(createTransportRequest);
     }
 
+    @PostMapping("/{id}/cost")
+    public TripCostResponse calculateTripCost(@PathVariable Long id) {
+        return transportRequestService.calculateTripCost(id);
+    }
+
     @GetMapping
     public List<TransportRequestResponse> getAllTransportRequests() {
         return transportRequestService.getAllTransportRequests();
@@ -36,6 +42,11 @@ public class TransportRequestController {
     @GetMapping("/{id}")
     public TransportRequestResponse getTransportRequestById(@PathVariable Long id) {
         return transportRequestService.getTransportRequestById(id);
+    }
+
+    @GetMapping("/{id}/cost")
+    public TripCostResponse getTripCost(@PathVariable Long id) {
+        return transportRequestService.getTripCost(id);
     }
 
     @PutMapping("/{id}")
@@ -56,4 +67,6 @@ public class TransportRequestController {
     public void deleteTransportRequest(@PathVariable Long id) {
         transportRequestService.deleteTransportRequest(id);
     }
+
+
 }

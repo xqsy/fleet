@@ -34,6 +34,9 @@ public class TransportRequest {
     @Column(name = "destination_address", nullable = false)
     private String destinationAddress;
 
+    @Column(name = "distance_km", nullable = false)
+    private Integer distanceKm;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "required_vehicle_type", nullable = false)
     private VehicleType requiredVehicleType;
@@ -58,6 +61,7 @@ public class TransportRequest {
     public TransportRequest(
             String departureAddress,
             String destinationAddress,
+            Integer distanceKm,
             VehicleType requiredVehicleType,
             Integer cargoWeightKg,
             Integer passengerCount,
@@ -65,6 +69,7 @@ public class TransportRequest {
     ) {
         this.departureAddress = departureAddress;
         this.destinationAddress = destinationAddress;
+        this.distanceKm = distanceKm;
         this.requiredVehicleType = requiredVehicleType;
         this.cargoWeightKg = cargoWeightKg;
         this.passengerCount = passengerCount;

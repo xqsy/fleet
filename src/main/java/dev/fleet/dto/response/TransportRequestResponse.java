@@ -9,6 +9,7 @@ public record TransportRequestResponse(
     Long id,
     String departureAddress,
     String destinationAddress,
+    Integer distanceKm,
     VehicleType requiredVehicleType,
     Integer cargoWeightKg,
     Integer passengerCount,
