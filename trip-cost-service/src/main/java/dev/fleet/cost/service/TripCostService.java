@@ -6,6 +6,7 @@ import dev.fleet.cost.dto.CreateTripCostRequest;
 import dev.fleet.cost.dto.TripCostResponse;
 import dev.fleet.cost.exception.TripCostNotFoundException;
 import dev.fleet.cost.mapper.TripCostMapper;
+import dev.fleet.cost.messaging.TripCostEventPublisher;
 import dev.fleet.cost.repository.TripCostRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ public class TripCostService {
     private final TripCostRepository tripCostRepository;
     private final TripCostMapper tripCostMapper;
     private final TripCostProperties tripCostProperties;
+    private final TripCostEventPublisher tripCostEventPublisher;
 
     public TripCostResponse calculate(CreateTripCostRequest request) {
         Integer distanceKm = request.distanceKm();
@@ -31,7 +33,11 @@ public class TripCostService {
         TripCost tripCost = tripCostRepository.save(
                 tripCostMapper.toEntity(request, fuelLiters, fuelCost, Instant.now()));
 
-        return tripCostMapper.toResponse(tripCost);
+        TripCostResponse response = tripCostMapper.toResponse(tripCost);
+
+        tripCostEventPublisher.publish(response);
+
+        return response;
     }
 
     public TripCostResponse getTransportRequestId(Long transportRequestId) {
